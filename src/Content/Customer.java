@@ -10,15 +10,15 @@ package Content;
  * @author anshu
  */
 public class Customer {
-    private int customerId;
+    private String customerId;
     private String name;
     private String streetAddress;
     private String city;
 
-    public Customer(int id){
+    public Customer(String id){
         this.customerId=id;
     }
-    public int getCustomerId() {
+    public String getCustomerId() {
         return customerId;
     }
 

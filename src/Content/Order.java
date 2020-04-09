@@ -10,25 +10,25 @@ package Content;
  * @author anshu
  */
 public class Order {
-    private int orderId;
-    private int customerId;
+    private String orderId;
+    private String customerId;
     private String product;
     private String shipping;
 
     
-    public Order(int orderId) {
+    public Order(String orderId) {
         this.orderId = orderId;
     }
 
-    public int getOrderId() {
+    public String getOrderId() {
         return orderId;
     }
     
-    public int getCustomerId() {
+    public String getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(int customerId) {
+    public void setCustomerId(String customerId) {
         this.customerId = customerId;
     }
 
