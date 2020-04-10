@@ -192,7 +192,7 @@ public class OrderFile extends Stage {
         
     }
     
-    public static void onExit(ArrayList<Order> arr) throws IOException {
+    public static void saveInFile(ArrayList<Order> arr) throws IOException {
         File file = new File("Order.dat");
         if (!file.exists()) {
             file.createNewFile();
