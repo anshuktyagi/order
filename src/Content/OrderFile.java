@@ -29,7 +29,7 @@ import javafx.stage.Stage;
  * @author anshu
  */
 public class OrderFile extends Stage {
-    
+
     TextField firstField = new TextField();
     TextField secondField = new TextField();
     TextField thirdField = new TextField();
@@ -51,19 +51,12 @@ public class OrderFile extends Stage {
     static ArrayList<Order> getOrderList = new ArrayList<Order>();
     static boolean check = true;
     static int i = 0;
-    
+
     public OrderFile() {
-        Stage addStage = new Stage();
-        addStage.setScene(scene);
-        addStage.show();
-        printing();
-        close.setOnMouseClicked((e) -> {
-            addStage.close();
-        });
-        
+        setScene(scene);
     }
-    
-    public void orderDetails(Order obj) throws FileNotFoundException, IOException {
+
+    public void addOrderInList(Order obj) throws FileNotFoundException, IOException {
         FileReader file = new FileReader("Order.dat");
         BufferedReader reader = new BufferedReader(file);
         FileReader filecust = new FileReader("Customer.dat");
@@ -84,7 +77,7 @@ public class OrderFile extends Stage {
                 StringTokenizer one = new StringTokenizer(dataCustomer, ",");
                 arrCust.add(subCust, one.nextToken());
                 subCust++;
-                
+
             }
             for (int a = 0; a < arrCust.size(); a++) {
                 if (secondField.getText().equalsIgnoreCase(arrCust.get(a))) {
@@ -95,9 +88,9 @@ public class OrderFile extends Stage {
                 StringTokenizer one = new StringTokenizer(dataOrder, ",");
                 arrOrder.add(subOrder, one.nextToken());
                 subOrder++;
-                
+
             }
-            
+
             for (int j = 0; j < arrOrder.size(); j++) {
                 if (firstField.getText().equalsIgnoreCase(arrOrder.get(j))) {
                     checkOid = true;
@@ -105,17 +98,17 @@ public class OrderFile extends Stage {
             }
             if (checkCid) {
                 if (!checkOid) {
-                    
+
                     obj.setCustomerId(secondField.getText());
                     obj.setProduct(thirdField.getText());
                     obj.setShipping(fourthField.getText());
                     orderList.add(obj);
-                    String alertString="Order Id: "+obj.getOrderId()+"\n"+
-                        "Customer Id: "+obj.getCustomerId()+"\n"+"Product: "+
-                        obj.getProduct()+"\n"+"Shipping method: "+
-                        obj.getShipping();
+                    String alertString = "Order Id: " + obj.getOrderId() + "\n"
+                            + "Customer Id: " + obj.getCustomerId() + "\n" + "Product: "
+                            + obj.getProduct() + "\n" + "Shipping method: "
+                            + obj.getShipping();
                     AlertClass.infoAlert("New Order added", alertString);
-                    
+
                 } else {
                     AlertClass.ialert("Order Id is not unique");
                     checkOid = false;
@@ -131,10 +124,10 @@ public class OrderFile extends Stage {
             thirdField.clear();
             fourthField.clear();
         }
-        
+
     }
-    
-    public static void setOrder(boolean vrr) throws IOException {
+
+    public static void saveOrderInFile(boolean vrr) throws IOException {
         check = vrr;
         File file = new File("Order.dat");
         if (!file.exists()) {
@@ -151,17 +144,17 @@ public class OrderFile extends Stage {
         }
         writer.close();
         fileWriter.close();
-        
+
     }
-    
+
     public static ArrayList<Order> getOrders() throws FileNotFoundException, IOException {
         FileReader file = new FileReader("Order.dat");
         BufferedReader reader = new BufferedReader(file);
-        
+
         String data;
         Order obj = null;
         while ((data = reader.readLine()) != null) {
-            
+
             StringTokenizer one = new StringTokenizer(data, ",");
             obj = new Order(one.nextToken());
             obj.setCustomerId(one.nextToken());
@@ -172,26 +165,25 @@ public class OrderFile extends Stage {
         reader.close();
         return getOrderList;
     }
-    
-    public void printing() {
+
+    public void setEvents() {
         update.setOnMouseClicked((e) -> {
-            Order one = new Order(firstField.getText());
+            Order newOrder = new Order(firstField.getText());
             try {
-                orderDetails(one);
-            } catch (IOException ex) {
-                Logger.getLogger(OrderFile.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            try {
-                
-                setOrder(true);
+                addOrderInList(newOrder);
+                saveOrderInFile(true);
                 getOrders();
+                this.close();
             } catch (IOException ex) {
                 Logger.getLogger(OrderFile.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
-        
+        close.setOnMouseClicked((e) -> {
+            this.close();
+        });
+
     }
-    
+
     public static void saveInFile(ArrayList<Order> arr) throws IOException {
         File file = new File("Order.dat");
         if (!file.exists()) {
@@ -199,7 +191,7 @@ public class OrderFile extends Stage {
         }
         FileWriter fileWriter = new FileWriter(file, false);
         BufferedWriter writer = new BufferedWriter(fileWriter);
-        
+
         for (int i = 0; i < arr.size(); i++) {
             Order input = arr.get(i);
             writer.write(input.getOrderId() + "," + input.getCustomerId()
@@ -208,6 +200,6 @@ public class OrderFile extends Stage {
         writer.flush();
         writer.close();
         fileWriter.close();
-        
+
     }
 }
