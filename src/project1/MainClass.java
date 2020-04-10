@@ -101,17 +101,17 @@ public class MainClass extends Application {
             mod.show();
             mod.setField(orderList, orderListindex);
             mod.setEvents(orderList, orderListindex, primaryStage);
-
+            System.out.println("modify button trigger");
             mod.setOnHiding((ev) -> {
                 try {
+
                     OrderFile.saveInFile(orderList);
                     display();
                 } catch (IOException ex) {
                     Logger.getLogger(MainClass.class.getName()).log(Level.SEVERE, null, ex);
                 }
             });
-            display();
-            System.out.println("Modify button trigger");
+
         });
 
         displayOrder.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -198,14 +198,21 @@ public class MainClass extends Application {
 
             if (alert()) {
                 try {
-                    CustomerFile two = new CustomerFile();
+                    CustomerFile newCustomer = new CustomerFile();
                 } catch (IOException ex) {
                     Logger.getLogger(MainClass.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
-                OrderFile one = new OrderFile();
-                orderListindex = orderList.size() - 1;
-                display();
+                OrderFile newOrderStage = new OrderFile();
+                newOrderStage.show();
+                newOrderStage.setEvents();
+                System.out.println("modify button trigger ");
+                newOrderStage.setOnHiding((ev) -> {
+
+                    orderListindex = orderList.size() - 1;
+                    display();
+                });
+
             }
 
         });
