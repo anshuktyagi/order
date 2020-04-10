@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -41,93 +42,78 @@ public class MainClass extends Application {
     TextField secondField = new TextField();
     TextField thirdField = new TextField();
     TextField fourthField = new TextField();
-    Button next = new Button("Next");
-    Button previous = new Button("Previous");
-    Button last = new Button("Last");
-    Button first = new Button("First");
-    Button modify = new Button("Modify");
-    Button add = new Button("add");
-    Button displayOrder = new Button("Orders");
-    Button displayCustomers = new Button("Customers");
-    Button delete = new Button("Delete");
-    Button search = new Button("Search");
+    Button next = new Button("Next Order");
+    Button previous = new Button("Previous Order");
+    Button last = new Button("Last Order");
+    Button first = new Button("First Order");
+    Button modify = new Button("Modify Order");
+    Button add = new Button("Add Customer/Order");
+    Button displayOrder = new Button("Show Orders");
+    Button displayCustomers = new Button("Show Customers");
+    Button delete = new Button("Delete Order");
+    Button search = new Button("Search Order");
     Label fLabel = new Label("id");
     HBox pane1 = new HBox(20, firstField, secondField, thirdField, fourthField);
-    HBox pane2 = new HBox(20, next, previous, last, first, modify, add, delete);
+    HBox pane2 = new HBox(20, previous, next, first, last, modify, add, delete);
     HBox pane3 = new HBox(20, displayCustomers, displayOrder, search);
     VBox pane = new VBox(20, pane1, pane2, pane3);
-    Scene scene = new Scene(pane, 600, 500);
-    int i = 0;
+    Scene scene = new Scene(pane, 800, 600);
+    int orderListindex = 0;
     ArrayList<Order> orderList = new ArrayList<>();
     static ArrayList<Customer> customerList = new ArrayList<>();
+    Modify mod;
 
-    public boolean alert() {
-        Alert check = new Alert(Alert.AlertType.CONFIRMATION);
-        check.setContentText("Are you a new customer");
-        ButtonType btn1 = new ButtonType("Yes");
-        ButtonType btn2 = new ButtonType("No");
-        check.getButtonTypes().setAll(btn1, btn2);
-        Optional<ButtonType> result = check.showAndWait();
-        if (result.get() == btn1) {
-            return true;
-        } else {
-            return false;
-        }
+    public static void main(String[] args) {
+        launch(args);
 
-    }
-
-    public static void addToCustList(Customer obj) {
-        customerList.add(obj);
-    }
-
-    public void display() {
-        if (!orderList.isEmpty()) {
-            firstField.setText(orderList.get(i).getOrderId());
-            secondField.setText(orderList.get(i).getCustomerId());
-            thirdField.setText(orderList.get(i).getProduct());
-            fourthField.setText(orderList.get(i).getShipping());
-        } else {
-            firstField.clear();
-            secondField.clear();
-            thirdField.clear();
-            fourthField.clear();
-        }
     }
 
     @Override
     public void start(Stage primaryStage) throws IOException {
         orderList = OrderFile.getOrders();
         customerList = CustomerFile.getData();
+
         display();
         first.setOnMouseClicked((e) -> {
-            i = 0;
-            display();
-        });
-        next.setOnMouseClicked((e) -> {
-            i++;
-            if (i > orderList.size() - 1) {
-                i--;
-            }
+            orderListindex = 0;
             display();
         });
         previous.setOnMouseClicked((e) -> {
-            i--;
-            if (i < 0) {
-                i = 0;
+            orderListindex--;
+            if (orderListindex < 0) {
+                orderListindex = 0;
+            }
+            display();
+        });
+        next.setOnMouseClicked((e) -> {
+            orderListindex++;
+            if (orderListindex > orderList.size() - 1) {
+                orderListindex--;
             }
             display();
         });
         last.setOnMouseClicked((e) -> {
-            i = orderList.size() - 1;
+            orderListindex = orderList.size() - 1;
             display();
         });
         modify.setOnMouseClicked((e) -> {
-            Modify mod = new Modify();
-            orderList = mod.modify(orderList, i);
+            mod = new Modify();
+            mod.show();
+            mod.setField(orderList, orderListindex);
+            mod.setEvents(orderList, orderListindex, primaryStage);
 
+            mod.setOnHiding((ev) -> {
+                try {
+                    OrderFile.saveInFile(orderList);
+                    display();
+                } catch (IOException ex) {
+                    Logger.getLogger(MainClass.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
             display();
-
+            System.out.println("Modify button trigger");
         });
+
         displayOrder.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
@@ -183,11 +169,11 @@ public class MainClass extends Application {
 
         delete.setOnMouseClicked((e) -> {
             if (!orderList.isEmpty()) {
-                if (AlertClass.dAlert(orderList, i)) {
-                    orderList.remove(i);
+                if (AlertClass.dAlert(orderList, orderListindex)) {
+                    orderList.remove(orderListindex);
                     AlertClass.infoAlert("Done", "Order deleted");
-                    if (i >= (orderList.size())) {
-                        i--;
+                    if (orderListindex >= (orderList.size())) {
+                        orderListindex--;
                     }
 
                     display();
@@ -202,7 +188,7 @@ public class MainClass extends Application {
                 alert.show();
             }
             try {
-                OrderFile.onExit(orderList);
+                OrderFile.saveInFile(orderList);
             } catch (IOException ex) {
                 Logger.getLogger(MainClass.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -218,7 +204,7 @@ public class MainClass extends Application {
                 }
             } else {
                 OrderFile one = new OrderFile();
-                i = orderList.size() - 1;
+                orderListindex = orderList.size() - 1;
                 display();
             }
 
@@ -231,8 +217,37 @@ public class MainClass extends Application {
 
     }
 
-    public static void main(String[] args) {
-        launch(args);
+    public boolean alert() {
+        Alert check = new Alert(Alert.AlertType.CONFIRMATION);
+        check.setContentText("Are you a new customer");
+        ButtonType btn1 = new ButtonType("Yes");
+        ButtonType btn2 = new ButtonType("No");
+        check.getButtonTypes().setAll(btn1, btn2);
+        Optional<ButtonType> result = check.showAndWait();
+        if (result.get() == btn1) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    public static void addToCustList(Customer obj) {
+        customerList.add(obj);
+    }
+
+    public void display() {
+        if (!orderList.isEmpty()) {
+            firstField.setText(orderList.get(orderListindex).getOrderId());
+            secondField.setText(orderList.get(orderListindex).getCustomerId());
+            thirdField.setText(orderList.get(orderListindex).getProduct());
+            fourthField.setText(orderList.get(orderListindex).getShipping());
+        } else {
+            firstField.clear();
+            secondField.clear();
+            thirdField.clear();
+            fourthField.clear();
+        }
     }
 
 }
