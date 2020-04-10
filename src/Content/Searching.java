@@ -30,7 +30,6 @@ public class Searching extends Stage {
     TextField firstFeild = new TextField();
     TextArea firstArea = new TextArea();
     Label firstLabel = new Label();
-//    Label secondLabel = new Label();
     Button search = new Button("Search");
     Button close = new Button("Close");
     Button close2 = new Button("Close");
@@ -42,7 +41,7 @@ public class Searching extends Stage {
     Stage result = new Stage();
     Scene secondScene = new Scene(pane2, 500, 500);
 
-    public Searching() throws FileNotFoundException {
+    public Searching() {
 
         boolean check = AlertClass.salert();
         if (AlertClass.checking) {
@@ -56,17 +55,24 @@ public class Searching extends Stage {
             searchStage.setScene(scene);
 
             searchStage.show();
-            FileReader file = new FileReader("Order.dat");
-            BufferedReader reader = new BufferedReader(file);
+            
 
             search.setOnMouseClicked((e) -> {
-                String getData;
+                FileReader file=null;
+                try {
+                    file = new FileReader("Order.dat");
+                    
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(Searching.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            BufferedReader reader = new BufferedReader(file);
+                String getData="";
                 String token;
                 String records = "";
                 boolean checkRecords = false;
                 if (check) {
                     try {
-
+                        
                         String data = firstFeild.getText();
                         while ((getData = reader.readLine()) != null) {
                             StringTokenizer one = new StringTokenizer(getData, ",");
@@ -79,7 +85,6 @@ public class Searching extends Stage {
                         }
                         if (checkRecords) {
                             firstArea.setText(records);
-                            System.out.println(AlertClass.checking);
                             result.setScene(secondScene);
                             result.show();
                             data = "";
@@ -89,7 +94,7 @@ public class Searching extends Stage {
                             result.show();
                             data = "";
                         }
-                    } catch (IOException ex) {
+                    } catch (Exception ex) {
                         Logger.getLogger(Searching.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 } else if (!check) {
@@ -116,7 +121,7 @@ public class Searching extends Stage {
                             result.show();
                             data = "";
                         }
-                    } catch (IOException ex) {
+                    } catch (Exception ex) {
                         Logger.getLogger(Searching.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }

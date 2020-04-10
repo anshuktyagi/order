@@ -39,7 +39,18 @@ public class AlertClass {
         }
 
     }
+    public static boolean mAlert(){
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setContentText("Do you want to modify this order");
 
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     public static void ialert(String data) {
         Alert alert = new Alert(AlertType.ERROR);
         alert.setTitle("Error Dialog");

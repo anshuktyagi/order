@@ -1,7 +1,10 @@
-o122,c101,sd,sd
-c123,c101,furr,fururr
-c124,c101,skqj,ikjm
-o125,c101,kjn,jkn
-o16,c101,kjn,jkn
-o333,c101,dfb,gsvd
-o444,c101,g,gf
+0101,c101,pen,method1
+o102,c102,Shoes,method2
+o103,c103,book,method3
+o104,c104,bag,method4
+o105,c101,bag,method5
+o106,c102,laptop,method6
+o107,c107,bag,method7
+o108,c106,watch,method8
+o109,c109,shoes,method9
+o110,c110,watch,method10

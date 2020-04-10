@@ -12,7 +12,6 @@ import Content.Modify;
 import Content.Order;
 import Content.OrderFile;
 import Content.Searching;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -60,7 +59,7 @@ public class MainClass extends Application {
     Scene scene = new Scene(pane, 600, 500);
     int i = 0;
     ArrayList<Order> orderList = new ArrayList<>();
-   static  ArrayList<Customer> customerList = new ArrayList<>();
+    static ArrayList<Customer> customerList = new ArrayList<>();
 
     public boolean alert() {
         Alert check = new Alert(Alert.AlertType.CONFIRMATION);
@@ -76,7 +75,8 @@ public class MainClass extends Application {
         }
 
     }
-    public static void addToCustList(Customer obj){
+
+    public static void addToCustList(Customer obj) {
         customerList.add(obj);
     }
 
@@ -124,7 +124,7 @@ public class MainClass extends Application {
         modify.setOnMouseClicked((e) -> {
             Modify mod = new Modify();
             orderList = mod.modify(orderList, i);
-            
+
             display();
 
         });
@@ -185,6 +185,7 @@ public class MainClass extends Application {
             if (!orderList.isEmpty()) {
                 if (AlertClass.dAlert(orderList, i)) {
                     orderList.remove(i);
+                    AlertClass.infoAlert("Done", "Order deleted");
                     if (i >= (orderList.size())) {
                         i--;
                     }
@@ -220,15 +221,10 @@ public class MainClass extends Application {
                 i = orderList.size() - 1;
                 display();
             }
-            
 
         });
         search.setOnMouseClicked((e) -> {
-            try {
-                Searching obj = new Searching();
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(MainClass.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            Searching obj = new Searching();
         });
         primaryStage.setScene(scene);
         primaryStage.show();
