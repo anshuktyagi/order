@@ -59,19 +59,19 @@ public class Modify extends Stage {
     }
 
     public void changeOrderList(ArrayList<Order> orderList, int i) {
-        if (AlertClass.mAlert()) {
+        if (AlertClass.modifyConfirmationDialogBox()) {
             if (!(firstField.getText().isEmpty() || secondField.getText().isEmpty())) {
                 Order orderObj = orderList.get(i);
                 orderObj.setProduct(firstField.getText());
                 orderObj.setShipping(secondField.getText());
                 orderList.set(i, orderObj);
-                AlertClass.infoAlert("Done", "Order Modified");
+                AlertClass.infoConfirmationDialogBox("Done", "Order Modified");
 
             } else {
-                AlertClass.ialert("Fields can't be empty");
+                AlertClass.errorConfirmationDialogBox("Fields can't be empty");
             }
         } else {
-            AlertClass.infoAlert("Okay", "Order not modified");
+            AlertClass.infoConfirmationDialogBox("Okay", "Order not modified");
         }
     }
 }

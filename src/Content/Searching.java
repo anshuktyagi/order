@@ -43,7 +43,7 @@ public class Searching extends Stage {
 
     public Searching() {
 
-        boolean check = AlertClass.salert();
+        boolean check = AlertClass.searchConfirmationDialogBox();
         if (AlertClass.checking) {
             Stage searchStage = new Stage();
             if (check) {

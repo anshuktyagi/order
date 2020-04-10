@@ -96,13 +96,13 @@ public class CustomerFile extends Stage {
                         obj.getName()+"\n"+"Street address: "
                     +obj.getStreetAddress()+"\n"+"City: "+
                         obj.getCity()+"\n";
-                 AlertClass.infoAlert("New customer Id", alertString);
+                 AlertClass.infoConfirmationDialogBox("New customer Id", alertString);
                  
             } else {
-                AlertClass.ialert("Customer Id is not unique");
+                AlertClass.errorConfirmationDialogBox("Customer Id is not unique");
             }
         } else {
-            AlertClass.ialert("Fields can't be empty");
+            AlertClass.errorConfirmationDialogBox("Fields can't be empty");
 
         }
 

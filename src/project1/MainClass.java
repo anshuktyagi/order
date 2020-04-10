@@ -169,9 +169,9 @@ public class MainClass extends Application {
 
         delete.setOnMouseClicked((e) -> {
             if (!orderList.isEmpty()) {
-                if (AlertClass.dAlert(orderList, orderListindex)) {
+                if (AlertClass.deleteConfirmationDialogBox(orderList, orderListindex)) {
                     orderList.remove(orderListindex);
-                    AlertClass.infoAlert("Done", "Order deleted");
+                    AlertClass.infoConfirmationDialogBox("Done", "Order deleted");
                     if (orderListindex >= (orderList.size())) {
                         orderListindex--;
                     }
@@ -227,11 +227,11 @@ public class MainClass extends Application {
     public boolean alert() {
         Alert check = new Alert(Alert.AlertType.CONFIRMATION);
         check.setContentText("Are you a new customer");
-        ButtonType btn1 = new ButtonType("Yes");
-        ButtonType btn2 = new ButtonType("No");
-        check.getButtonTypes().setAll(btn1, btn2);
+        ButtonType yesBtn = ButtonType.YES;
+        ButtonType noBtn = ButtonType.NO;
+        check.getButtonTypes().setAll(yesBtn, noBtn);
         Optional<ButtonType> result = check.showAndWait();
-        if (result.get() == btn1) {
+        if (result.get() == yesBtn) {
             return true;
         } else {
             return false;

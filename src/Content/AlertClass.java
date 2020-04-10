@@ -16,12 +16,14 @@ import javafx.scene.control.ButtonType;
  * @author anshu
  */
 public class AlertClass {
-    protected static boolean checking=true;
+
+    protected static boolean checking = true;
     static ArrayList<Order> orderobj = new ArrayList<>();
     static ArrayList<Customer> customerobj = new ArrayList<>();
     static OrderFile object;
     static CustomerFile custObj;
-    public static boolean dAlert(ArrayList<Order> obj, int i) {
+
+    public static boolean deleteConfirmationDialogBox(ArrayList<Order> obj, int i) {
         orderobj = obj;
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Confirmation Dialog");
@@ -39,7 +41,8 @@ public class AlertClass {
         }
 
     }
-    public static boolean mAlert(){
+
+    public static boolean modifyConfirmationDialogBox() {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Confirmation Dialog");
         alert.setContentText("Do you want to modify this order");
@@ -51,7 +54,8 @@ public class AlertClass {
             return false;
         }
     }
-    public static void ialert(String data) {
+
+    public static void errorConfirmationDialogBox(String data) {
         Alert alert = new Alert(AlertType.ERROR);
         alert.setTitle("Error Dialog");
         alert.setContentText(data);
@@ -59,38 +63,39 @@ public class AlertClass {
 
     }
 
-    public static boolean salert() {
-        boolean check=true;
-        Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle("Search Options");
-        alert.setHeaderText("How do you want to search?");
-        alert.setContentText("1. Select Customer to search orders of a"
+    public static boolean searchConfirmationDialogBox() {
+        boolean check = true;
+        Alert alertObj = new Alert(AlertType.CONFIRMATION);
+        alertObj.setTitle("Search Options");
+        alertObj.setHeaderText("How do you want to search?");
+        alertObj.setContentText("1. Select Customer to search orders of a"
                 + " perticular customer Id\n 2.Select product to search "
                 + "orders according to a perticular product");
-        ButtonType btn1 = new ButtonType("Customer");
-        ButtonType btn2 = new ButtonType("Product");
-        ButtonType btn3 = new ButtonType("Cancel");
-        alert.getButtonTypes().setAll(btn1, btn2, btn3);
+        ButtonType customerBtn = new ButtonType("Customer");
+        ButtonType productBtn = new ButtonType("Product");
+        ButtonType cancelBtn = ButtonType.CANCEL;
+        alertObj.getButtonTypes().setAll(customerBtn, productBtn, cancelBtn);
 
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == btn3) {
-            alert.close();
-            checking=false;
-        }
-        else if (result.get() == btn1) {
-            check=true;
-        } else if (result.get() == btn2) {
-            check=false;
-        }else {
-            check=false;
+        Optional<ButtonType> result = alertObj.showAndWait();
+
+        if (result.get() == cancelBtn) {
+            alertObj.close();
+            checking = false;
+        } else if (result.get() == customerBtn) {
+            check = true;
+        } else if (result.get() == productBtn) {
+            check = false;
+        } else {
+            check = false;
         }
         return check;
     }
-    public static void infoAlert(String data,String alertString){
+
+    public static void infoConfirmationDialogBox(String data, String alertString) {
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle(data);
-                alert.setHeaderText(alertString);
-        
+        alert.setHeaderText(alertString);
+
         alert.show();
     }
 }

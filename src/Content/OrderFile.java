@@ -107,18 +107,18 @@ public class OrderFile extends Stage {
                             + "Customer Id: " + obj.getCustomerId() + "\n" + "Product: "
                             + obj.getProduct() + "\n" + "Shipping method: "
                             + obj.getShipping();
-                    AlertClass.infoAlert("New Order added", alertString);
+                    AlertClass.infoConfirmationDialogBox("New Order added", alertString);
 
                 } else {
-                    AlertClass.ialert("Order Id is not unique");
+                    AlertClass.errorConfirmationDialogBox("Order Id is not unique");
                     checkOid = false;
                 }
             } else {
-                AlertClass.ialert("Please enter valid customer Id");
+                AlertClass.errorConfirmationDialogBox("Please enter valid customer Id");
                 checkCid = false;
             }
         } else {
-            AlertClass.ialert("Fields can't be empty");
+            AlertClass.errorConfirmationDialogBox("Fields can't be empty");
             firstField.clear();
             secondField.clear();
             thirdField.clear();
