@@ -16,7 +16,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import project1.MainClass;
 
 /**
  *
@@ -36,40 +35,42 @@ public class Modify extends Stage {
     VBox pane = new VBox(20, pane1, pane2, pane3);
     Scene scene = new Scene(pane);
 
-    public ArrayList<Order> modify(ArrayList<Order> orderList, int i) {
-        Stage modifyStage = new Stage();
-        modifyStage.setScene(scene);
-        modifyStage.show();
-        modify.setOnMouseClicked((e) -> {
-            changeList(orderList, i);
-            modifyStage.close();
-        });
-        close.setOnMouseClicked((e) -> {
-            modifyStage.close();
-        });
-        modifyStage.setOnHiding((e) -> {
-            try {
-                OrderFile.onExit(orderList);
-            } catch (IOException ex) {
-                Logger.getLogger(Modify.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        });
-        return orderList;
+    public Modify() {
+
+        setScene(scene);
+
     }
 
-    public void changeList(ArrayList<Order> orderList, int i) {
-        if(AlertClass.mAlert()){
-        if (!(firstField.getText().isEmpty() || secondField.getText().isEmpty())) {
-            Order one = orderList.get(i);
-            one.setProduct(firstField.getText());
-            one.setShipping(secondField.getText());
-            orderList.set(i, one);
-            AlertClass.infoAlert("Done", "Order Modified");
+    public void setEvents(ArrayList<Order> orderList, int i, Stage primaryStage) {
+        modify.setOnMouseClicked((e) -> {
+            changeOrderList(orderList, i);
+            this.close();
+        });
+        close.setOnMouseClicked((e) -> {
+            this.close();
+        });
+    }
+
+    public void setField(ArrayList<Order> orderList, int i) {
+        Order orderObj = orderList.get(i);
+        firstField.setText(orderObj.getProduct());
+        secondField.setText(orderObj.getShipping());
+
+    }
+
+    public void changeOrderList(ArrayList<Order> orderList, int i) {
+        if (AlertClass.mAlert()) {
+            if (!(firstField.getText().isEmpty() || secondField.getText().isEmpty())) {
+                Order orderObj = orderList.get(i);
+                orderObj.setProduct(firstField.getText());
+                orderObj.setShipping(secondField.getText());
+                orderList.set(i, orderObj);
+                AlertClass.infoAlert("Done", "Order Modified");
+
+            } else {
+                AlertClass.ialert("Fields can't be empty");
+            }
         } else {
-            AlertClass.ialert("Fields can't be empty");
-        }
-        }
-        else{
             AlertClass.infoAlert("Okay", "Order not modified");
         }
     }
